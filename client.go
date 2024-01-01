@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"os/exec"
 	"runtime"
 	"time"
 
@@ -39,26 +40,114 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 
 	if runtime.GOOS == message.OS {
 		if message.Type == "bat" {
-			log.Println("win bat cmd recv")
-			publish_log(client, get_hostname()+"win bat cmd recv")
+			if runtime.GOOS != "linux" {
+				log.Println("win bat cmd recv")
+				publish_log(client, get_hostname()+"win bat cmd recv")
+
+				go func() {
+					cmd := exec.Command("cmd", "/C", message.Command)
+					out, err := cmd.CombinedOutput()
+					if err != nil {
+						fmt.Println("error with:", err.Error())
+						publish_log(client, err.Error())
+					} else {
+						fmt.Println(string(out))
+						publish_log(client, string(out))
+					}
+				}()
+
+			}
+		} else if message.Type == "bat_script" {
+			if runtime.GOOS != "linux" {
+				log.Println("win batch cmd recv")
+				publish_log(client, get_hostname()+"win bat cmd recv")
+				go func() {
+					cmd := exec.Command("cmd", "/C", message.Command)
+					out, err := cmd.CombinedOutput()
+					if err != nil {
+						fmt.Println("error with:", err.Error())
+						publish_log(client, err.Error())
+					} else {
+						fmt.Println(string(out))
+						publish_log(client, string(out))
+					}
+				}()
+
+			}
+
 		} else if message.Type == "powershell" {
-			log.Println("win powershell cmd recv")
+			log.Println("powershell cmd recv")
+			go func() {
+				cmd := exec.Command("powershell", "-Command", message.Command)
+				out, err := cmd.CombinedOutput()
+				if err != nil {
+					fmt.Println("error with:", err.Error())
+					publish_log(client, err.Error())
+				} else {
+					fmt.Println(string(out))
+					publish_log(client, string(out))
+				}
+			}()
+
 		} else if message.Type == "pwsh" {
 			log.Println("win pwsh cmd recv")
+			go func() {
+				cmd := exec.Command("pwsh", "-Command", message.Command)
+				out, err := cmd.CombinedOutput()
+				if err != nil {
+					fmt.Println("error with:", err.Error())
+					publish_log(client, err.Error())
+				} else {
+					fmt.Println(string(out))
+					publish_log(client, string(out))
+				}
+			}()
+
 		} else if message.Type == "powershell_script" {
 			log.Println("win powershell_script cmd recv")
+			go func() {
+				cmd := exec.Command("cmd", "/C", message.Command)
+				out, err := cmd.CombinedOutput()
+				if err != nil {
+					fmt.Println("error with:", err.Error())
+					publish_log(client, err.Error())
+				} else {
+					fmt.Println(string(out))
+					publish_log(client, string(out))
+				}
+
+				// {
+				// 	"type": "powershell_script",
+				// 	"command":"curl -s https://it2u.oss-cn-shenzhen.aliyuncs.com/scripts/test.ps1 | powershell -NoLogo"
+				// }
+			}()
+
 		} else if message.Type == "bash" {
-			log.Println("linux cmd")
-			publish_log(client, get_hostname()+"linux bash cmd recv")
+			if runtime.GOOS != "windows" {
+				log.Println("linux cmd")
+				publish_log(client, get_hostname()+"linux bash cmd recv")
+
+				go func() {
+					cmd := exec.Command("dash", "-c", message.Command)
+					out, err := cmd.CombinedOutput()
+					if err != nil {
+						fmt.Println("error with:", err.Error())
+						publish_log(client, err.Error())
+					} else {
+						fmt.Println(string(out))
+						publish_log(client, string(out))
+					}
+				}()
+
+			}
+
 		} else {
 			log.Println("Bad command type")
 			publish_log(client, get_hostname()+":Bad command type")
-
 		}
 	} else {
-		log.Println("Bad OS parameter")
+		log.Println("Mismatched OS Type")
 		publish_log(client, get_hostname()+"Bad OS parameter")
-
 	}
 }
 

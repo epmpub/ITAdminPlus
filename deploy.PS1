@@ -38,3 +38,7 @@ Copy-Item C:\Users\sheng\ITAdminPlus\forWin.exe -Destination \\vm-s19\c$\forWin.
 
 invoke-Command -Session $ss  -ScriptBlock {Start-Process c:\forWin.exe }
 invoke-Command -Session $ss  -ScriptBlock {Get-Process -Name forWin}
+
+# install-Module
+# $ProgressPreference = "SilentlyContinue"
+# Install-Module -Name powershell-yaml
