@@ -1,5 +1,7 @@
 # Arm Dev
 Get-Content $env:USERPROFILE\.ssh\id_rsa.pub | ssh openailab@192.168.3.146 "cat >> .ssh/authorized_keys"
+Get-Content $env:USERPROFILE\.ssh\id_rsa.pub | ssh openailab@192.168.3.172 "cat >> .ssh/authorized_keys"
+
 
 # utools
 Get-Content $env:USERPROFILE\.ssh\id_rsa.pub | ssh root@39.108.212.138 "cat >> .ssh/authorized_keys"
