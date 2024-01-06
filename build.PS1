@@ -5,6 +5,9 @@ Remove-Item .\forWin.exe -ErrorAction SilentlyContinue
 Remove-Item .\forArm  -ErrorAction SilentlyContinue
 Remove-Item .\forLinux  -ErrorAction SilentlyContinue
 Remove-Item .\forMac  -ErrorAction SilentlyContinue
+Remove-Item .\forMac  -ErrorAction SilentlyContinue
+Remove-Item .\md5.txt  -ErrorAction SilentlyContinue
+
 
 $env:CGO_ENABLED="0"
 $env:GOOS="linux"
@@ -25,7 +28,10 @@ $env:GOOS="windows"
 $env:GOARCH="amd64"
 go build -o forWin.exe
 
+
 $env:CGO_ENABLED="0"
 $env:GOOS="darwin"
 $env:GOARCH="amd64"
 go build -o forMac
+
+Get-FileHash -Algorithm MD5 .\forWin.exe | ConvertTo-Json  | Out-File md5.json

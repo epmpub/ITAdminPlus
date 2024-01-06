@@ -1,6 +1,8 @@
 // author: andy.hu
 // email:andy.hu.sheng@gmail.com
 // date: 2024/1/5 16:11
+// version: v1.0
+// change log: 1.UPDATE AAAA BBBB MD5 VALUE
 
 package main
 
