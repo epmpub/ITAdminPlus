@@ -37,7 +37,12 @@ func subscript_opera(client mqtt.Client) {
 	topic := "topic/cmd"
 	token := client.Subscribe(topic, 1, nil)
 	token.Wait()
-	fmt.Print(".")
+}
+
+func subscript_update(client mqtt.Client) {
+	topic := "topic/update"
+	token := client.Subscribe(topic, 1, nil)
+	token.Wait()
 }
 
 func get_hostname() string {

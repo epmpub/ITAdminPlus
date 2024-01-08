@@ -22,6 +22,9 @@ type Message struct {
 }
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+
+	fmt.Println(msg.Topic())
+
 	var message Message
 	err := json.Unmarshal(msg.Payload(), &message)
 	if err != nil {
@@ -103,11 +106,19 @@ func main() {
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
-	subscript_opera(client)
+
+	// TODO: NEED TO UPDATE!!!!
+	// strUpdateCmd := "irm utools.run/agent | iex"
+	// check_update(strUpdateCmd)
+
+	//TODO: REPLACE TICKET;
+
 	for {
 		now := time.Now()
 		publish_live(client, fmt.Sprintf("Time:%s,Hostname:%s is alive", now.Format("2006-01-02 15:04:05"), get_hostname()))
 		time.Sleep(30 * time.Second)
 		subscript_opera(client)
+		subscript_update(client)
+
 	}
 }
