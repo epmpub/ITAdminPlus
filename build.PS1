@@ -35,3 +35,11 @@ $env:GOARCH="amd64"
 go build -o forMac
 
 Get-FileHash -Algorithm MD5 .\forWin.exe | ConvertTo-Json  | Out-File md5.json
+
+ossutil.exe cp .\forWin.exe oss://it2u/forWin.exe -f
+ossutil.exe cp .\md5.json oss://it2u/md5.json -f
+
+ossutil.exe set-acl oss://it2u/forWin.exe public-read
+ossutil.exe set-acl oss://it2u/md5.json public-read
+
+

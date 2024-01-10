@@ -1,5 +1,7 @@
 
-# TEST CASE
+# 测试流程
+
+### compile and upload bin and md5.json to OSS .
 
 ### call powershell script
 ```powershell
