@@ -12,11 +12,11 @@ import (
 )
 
 var connectHandler mqtt.OnConnectHandler = func(client mqtt.Client) {
-	fmt.Println("Connected")
+	fmt.Println("Server Connected")
 }
 
 var connectLostHandler mqtt.ConnectionLostHandler = func(client mqtt.Client, err error) {
-	fmt.Printf("Connect lost: %v", err)
+	fmt.Printf("Server Connection lost: %v", err)
 }
 
 func publish_live(client mqtt.Client, msg string) {
@@ -40,7 +40,7 @@ func subscript_opera(client mqtt.Client) {
 }
 
 func subscript_update(client mqtt.Client) {
-	topic := "topic/update"
+	topic := "topic/update_version"
 	token := client.Subscribe(topic, 1, nil)
 	token.Wait()
 }

